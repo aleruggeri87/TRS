@@ -9915,17 +9915,17 @@ void ReadGSIPMParamsFromFile(void){
 	fclose(wifile);
 }
 void ReadCalibrationMapFromFile(void){
-	FILE *sfile;
-	MakePathname (DIR_SOLUS, P.Solus.CalibMapFile, P.Solus.CalibMapFilePath);
-	sfile = fopen (P.Solus.SeqFilePath, "r");
-	char line[STRLEN];   
-	int io,ip,pixid=0;
-	for(io=0;io<N_OPTODE;io++){
-		fgets(line,STRLEN,sfile);
-		for(ip=0;ip<N_PIXEL;ip++)
-			fscanf(sfile,"%d\t%hu\n",&pixid,&P.Solus.CalibMap[io][ip]);		 //to check
-	}
-	fclose(sfile);
+    FILE *sfile;
+    MakePathname (DIR_SOLUS, P.Solus.CalibMapFile, P.Solus.CalibMapFilePath);
+    sfile = fopen (P.Solus.CalibMapFilePath, "r");
+    char line[STRLEN];   
+    int io,ip,pixid=0;
+    for(io=0;io<N_OPTODE;io++){
+        fgets(line,STRLEN,sfile);
+        for(ip=0;ip<N_PIXEL;ip++)
+            fscanf(sfile,"%d\t%hu\n",&pixid,&P.Solus.CalibMap[io][ip]);         //to check
+    }
+    fclose(sfile);
 }
 void ReadInfoFromSolusPanel(void){
 	int io;

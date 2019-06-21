@@ -9729,11 +9729,11 @@ void ReadMeasSequenceFromFile(void){
 	sfile = fopen (P.Solus.SeqFilePath, "r");
 	int is;
 	char line[STRLEN];
-	UINT16 meas_time,attenuation,gate_delay_fine;
-	UINT8 gate_delay_coarse,laser_num; 
+	float meas_time, attenuation,gate_delay_fine;
+	float gate_delay_coarse,laser_num; 
 	fgets(line,STRLEN,sfile); 
 	for(is=0;is<MAX_SEQUENCE;is++){
-		fscanf(sfile, "%hu\t%hu\t%hhu\t%hu\t%hhu\n",&meas_time,&attenuation,&gate_delay_coarse,&gate_delay_fine,&laser_num);
+		fscanf(sfile, "%f\t%f\t%f\t%f\t%f\n",&meas_time,&attenuation,&gate_delay_coarse,&gate_delay_fine,&laser_num);
 		P.Solus.MeasSequence[is].meas_time = meas_time;
 		P.Solus.MeasSequence[is].attenuation = attenuation;
 		P.Solus.MeasSequence[is].gate_delay_coarse = gate_delay_coarse;
@@ -10461,7 +10461,7 @@ int CVICALLBACK ExportMeasSequence (int panel, int control, int event,void *call
 	sfile = fopen (fpath, "w");
 	fprintf(sfile, "Time\tAttenuation\tGate_Dly_C\tGate_Dly_F\tLaser_Num\n");
 	for(is=0;is<MAX_SEQUENCE;is++)   
-	fprintf(sfile, "%hu\t%hu\t%hhu\t%hu\t%hhu\n",P.Solus.MeasSequence[is].meas_time,P.Solus.MeasSequence[is].attenuation,P.Solus.MeasSequence[is].gate_delay_coarse,P.Solus.MeasSequence[is].gate_delay_fine,P.Solus.MeasSequence[is].laser_num);
+	fprintf(sfile, "%f\t%d\t%d\t%d\t%d\n",P.Solus.MeasSequence[is].meas_time,P.Solus.MeasSequence[is].attenuation,P.Solus.MeasSequence[is].gate_delay_coarse,P.Solus.MeasSequence[is].gate_delay_fine,P.Solus.MeasSequence[is].laser_num);
 	fclose(sfile);
 	char fileName[260];char driveName[260];char directoryName[260];
 	SplitPath (fpath,driveName,directoryName,fileName);

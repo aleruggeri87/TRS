@@ -2173,7 +2173,7 @@ void SpcTime(float Time){
 		case SPC_SPADLAB: for(ib=0;ib<P.Num.Board;ib++) TimeSpad(ib,Time); break;
 		case SPC_NIRS: for(ib=0;ib<P.Num.Board;ib++) TimeNirs(ib,Time); break;
 		case SPC_LUCA: for(ib=0;ib<P.Num.Board;ib++) TimeLuca(ib,Time); break;
-		case SPC_SOLUS: P.Spc.TimeSolus = (UINT16) (Time*SEC_2_100s_MICROSEC); break;
+		case SPC_SOLUS: P.Spc.TimeSolus = (float) (Time); break;//*SEC_2_100s_MICROSEC); break;
 		case TEST: break;
 		case DEMO: break;
 		}
@@ -10149,24 +10149,25 @@ void StartSolusMeas(void){
 	for(is=0;is<P.Solus.AcqTot;is++) //SOLUS TO CHECK
 		P.Solus.MeasSequence[is].meas_time = P.Spc.TimeSolus;
 	ret = SOLUS_SetSequence(P.Solus.SolusObj,&P.Solus.MeasSequence);
+	if(ret<0){ErrHandler(ERR_SOLUS,ret,"SOLUS_SetSequence\n");P.Solus.StartError = TRUE;P.Solus.MeasStarted = FALSE;return;}
 	ret =  SOLUS_StartSequence(P.Solus.SolusObj,P.Solus.AcqType,P.Solus.AutoCal);
 	if(ret<0){ErrHandler(ERR_SOLUS,ret,"StartSolusMeas\n");P.Solus.StartError = TRUE;P.Solus.MeasStarted = FALSE;return;}
 	else {SetCtrlVal(hDisplay,DISPLAY_MESSAGE,"Solus Meas Started\n");P.Solus.StartError = FALSE;P.Solus.MeasStarted = TRUE;P.Solus.MeasStopped = FALSE;}
 	P.Solus.AcqActual = 0;
 }
 void WaitSolus(void){
-	int ret,itry = 0;
+	int ret;
 	UINT16 nlines;
 	
 	do{
 		ret = SOLUS_QueryNLinesAvailable(P.Solus.SolusObj,&nlines);
 		if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_QueryNLinesAvailable");return;}
-		itry++;
-	}while(nlines != P.Solus.NLines && itry<10);	
+		//itry++;
+	}while(nlines < P.Solus.NLines);	
 }
 void GetDataSolus(void){
 	
-	int io,ic,ib=0,ret;
+	int io,ic,iro=0,ib=0,ret;
 	Frame SingleFrame;
 	if (P.Solus.AcqActual>=P.Solus.AcqTot||P.Solus.AcqActual>=MAX_SEQUENCE){
 		if(P.Contest.Function == CONTEST_OSC){
@@ -10179,9 +10180,10 @@ void GetDataSolus(void){
 	if(ret<0){ErrHandler(ERR_SOLUS,ret,"SOLUS_GetMeasurement");return;}
 	for(io=0;io<N_OPTODE;io++){
 		if(P.Solus.OptList[io]){
-			SingleFrame = (*P.Solus.DataSolus)[io];
+			SingleFrame = (*P.Solus.DataSolus)[iro];
 			for(ic=0;ic<P.Chann.Num;ic++)
 			D.Buffer[ib][io*P.Chann.Num+ic] = SingleFrame.histogram_data[ic];
+			iro++;
 		}
 		else{
 			for(ic=0;ic<P.Chann.Num;ic++)
@@ -10189,6 +10191,9 @@ void GetDataSolus(void){
 		}
 	}
 	P.Solus.AcqActual=P.Solus.AcqActual+P.Solus.NLines;
+	if(P.Solus.AcqActual>=P.Solus.AcqTot)
+		StopSolusMeas();
+		
 }
 void StartSolusDRCMeasure(void){
 	int ret;

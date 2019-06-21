@@ -4650,7 +4650,7 @@ void MoveSwitch1X4(long Goal,char Switch){
 	TaskHandle taskswitch0 = 0;
 	TaskHandle taskswitch1 = 0;
 	TaskHandle taskswitch2 = 0;	
-	 
+#ifdef NIDAQMX	 
 	status = DAQmxCreateTask ("Taskswitch0", &taskswitch0);
 	status = DAQmxCreateTask ("Taskswitch1", &taskswitch1); 
 	status = DAQmxCreateTask ("Taskswitch2", &taskswitch2); 	  
@@ -4690,7 +4690,7 @@ void MoveSwitch1X4(long Goal,char Switch){
 	status = DAQmxClearTask (taskswitch0);  
 	status = DAQmxClearTask (taskswitch1);  
 	status = DAQmxClearTask (taskswitch2);  
-
+#endif
 }  
 
 
@@ -7119,7 +7119,7 @@ void SetFreqNI_USB6229(char Step,long Goal){
 	TaskHandle	tasklatch=0;
 	TaskHandle	taskmoden=0;
 	
-	
+#ifdef NIDAQMX	
 	DAQmxCreateTask ("TaskFreq", &taskfreq);
 	DAQmxCreateTask ("TaskLatch", &tasklatch); 
 	DAQmxCreateTask ("TaskModEn", &taskmoden); 
@@ -7154,6 +7154,7 @@ void SetFreqNI_USB6229(char Step,long Goal){
 	DAQmxClearTask (taskfreq);
 	DAQmxClearTask (tasklatch);  
 	DAQmxClearTask (taskmoden);  
+#endif
 }
 
 
@@ -7162,12 +7163,14 @@ void SetVoltNI_USB6229(char Step,long Goal){
 	float volt;
 	
 	volt=(float)Goal/AOTF_VOLT_FACTOR;
+#ifdef NIDAQMX
 	//DAQmxCreateTask ("TaskModPower", &taskmodpower);
 	DAQmxCreateAOVoltageChan (taskmodpower, "Dev1/ao0", "MOD_POWER", 0, 1, DAQmx_Val_Volts, "");
 	DAQmxStartTask (taskmodpower);
 	DAQmxWriteAnalogScalarF64 (taskmodpower, 1, 10.0, volt, 0);
 	DAQmxStopTask (taskmodpower);
 	DAQmxClearTask (taskmodpower);
+#endif
 }
 
 
@@ -7179,11 +7182,13 @@ void SetVoltNI_USB6221(char Step,long Goal){
 	
 	//volt=(float)Goal/AOTF_VOLT_FACTOR;
 	//DAQmxCreateTask ("TaskModPower", &taskmodpower);
+#ifdef NIDAQMX
     DAQmxCreateAIVoltageChan (taskmodpower, "Dev1/ai0", " MOD_POWER ", DAQmx_Val_NRSE, -0.5, 0, DAQmx_Val_Volts, "");
 	DAQmxStartTask (taskmodpower);
 	DAQmxReadAnalogScalarF64 (taskmodpower, 10.0, &volt, 0);	
 	DAQmxStopTask (taskmodpower);
 	DAQmxClearTask (taskmodpower);
+#endif
 	P.Step[Step].Actual=(long)(volt*ADC_FACTOR);
 }
 
@@ -8237,6 +8242,7 @@ void InitAdc(void){
 void StartAdc(void){
 	//TaskHandle	taskmodpower=0; 
 	short status = 0;
+#ifdef NIDAQMX
 	status = DAQmxCreateTask ("", &P.Power.Adc.taskmodpower_diode);
     if(status!=0) Failure(GetDAQErrorString(status));
 	status = DAQmxCreateAIVoltageChan (P.Power.Adc.taskmodpower_diode, "Dev1/ai0", "", DAQmx_Val_RSE, -0.3, 0.0, DAQmx_Val_Volts, NULL);
@@ -8266,7 +8272,8 @@ void StartAdc(void){
     //**SetCtrlVal (hDisplay, DISPLAY_MESSAGE,message);
     //status = AIClearAcquisition (P.Power.Adc.Task);
     //if(status!=0) Failure(GetDAQErrorString(status));
-    }
+#endif
+}
     
     
 /* STOP ADC ACQUISITION */
@@ -8277,6 +8284,7 @@ void WaitAdc(void){
 	//double stdev,value;
 	//status = DAQmxStopTask (P.Power.Adc.taskmodpower_diode);
 	//if(status!=0) Failure(GetDAQErrorString(status));
+#ifdef NIDAQMX
 	//status = DAQmxReadAnalogF64 (taskmodpower, P.Spc.TimeM*120, 10.0, DAQmx_Val_GroupByScanNumber, P.Power.Adc.Data, P.Spc.TimeM*200, &num_read, 0);
 	status = DAQmxReadAnalogF64 (P.Power.Adc.taskmodpower_diode, -1, 0, DAQmx_Val_GroupByChannel, P.Power.Adc.Data, 100000, &num_read, 0);
 	if(status!=0) Failure(GetDAQErrorString(status));
@@ -8290,6 +8298,7 @@ void WaitAdc(void){
 	P.Step[P.Power.Step].Actual=(long)(value*ADC_FACTOR);
 	status = DAQmxClearTask (P.Power.Adc.taskmodpower_diode);
     if(status!=0) Failure(GetDAQErrorString(status));
+#endif
 	//status=nidaqAIStop (P.Power.Adc.Task);
     //if(status!=0) Failure(GetDAQErrorString(status));
 	//status = nidaqAIRead (P.Power.Adc.Task, "", 1000, -1.0, P.Power.Adc.Data);
@@ -8298,7 +8307,7 @@ void WaitAdc(void){
     //if(status!=0) Failure(GetDAQErrorString(status));
     //P.Step[P.Power.Step].Actual=(long)(value*ADC_FACTOR);
     
-    }
+}
 
 
 /* STOP ADC ACQUISITION */
@@ -10146,12 +10155,13 @@ void StartSolusMeas(void){
 	P.Solus.AcqActual = 0;
 }
 void WaitSolus(void){
-int ret,itry = 0;
-UINT16 nlines;
-do{
-	ret = SOLUS_IsMeasurementAvailable(P.Solus.SolusObj,&nlines);
-	if(ret<0) {ErrHandler(ERR_SOLUS,ret,"LaserOFF");}
-	itry++;
+	int ret,itry = 0;
+	UINT16 nlines;
+	
+	do{
+		ret = SOLUS_QueryNLinesAvailable(P.Solus.SolusObj,&nlines);
+		if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_QueryNLinesAvailable");return;}
+		itry++;
 	}while(nlines != P.Solus.NLines && itry<10);	
 }
 void GetDataSolus(void){
@@ -10650,7 +10660,7 @@ void TellPosSipmStepSolus(char Step,long *Actual){
 	Actual = NULL;
 	if(P.Solus.OptList[P.Step[Step].Com-1]){
 		SingleFrame = (*P.Solus.DataSolus)[P.Step[Step].Com-1];
-		Actual = &SingleFrame.Area_ON;
+		Actual = (long*)&SingleFrame.Area_ON;
 	}
 	/*ret = SOLUS_GetArea(P.Solus.SolusObj,P.Step[Step].Com-1,&P.Solus.OptArea[P.Step[Step].Com-1]);
 	Actual = &P.Solus.OptArea[P.Step[Step].Com-1]; 

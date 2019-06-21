@@ -651,7 +651,7 @@
 #define LABEL_TAC_LIMIT_HIGH    "tac_limit_high"
 
 
-#define INFINITY	 60000
+//#define INFINITY	 60000
 #define MBADR	     0x280  // i/o port address on which the card is mapped 
 #define MAX_CHANN_SILENA	     8192   //
 #define GROUP_SILENA    0	    //

@@ -10601,8 +10601,10 @@ void InitLDStepSolus(char Step){
 void CloseLDStepSolus(char Step){
 	int ret,io;
 	if(P.Action.CloseMeasure){
-		ret = SOLUS_LaserOFF(P.Solus.SolusObj);
-		if(ret<0) {ErrHandler(ERR_SOLUS,ret,"LaserOFF");}
+		if(P.Solus.SolusObj!=NULL){ //AleR
+			ret = SOLUS_LaserOFF(P.Solus.SolusObj);
+			if(ret<0) {ErrHandler(ERR_SOLUS,ret,"LaserOFF");}
+		}
 	}
 }
 void MoveLDStepSolus(char Step,long Goal,char Wait){

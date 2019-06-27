@@ -10169,6 +10169,9 @@ void GetDataSolus(void){
 	
 	int io,ic,iro=0,ib=0,ret;
 	Frame SingleFrame;
+	
+	WaitSolus();
+	
 	if (P.Solus.AcqActual>=P.Solus.AcqTot||P.Solus.AcqActual>=MAX_SEQUENCE){
 		if(P.Contest.Function == CONTEST_OSC){
 			StopSolusMeas();

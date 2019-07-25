@@ -1,5 +1,6 @@
 /**************************************************************************/
 /* LabWindows/CVI User Interface Resource (UIR) Include File              */
+/* Copyright (c) National Instruments 2019. All Rights Reserved.          */
 /*                                                                        */
 /* WARNING: Do not add to, delete from, or otherwise modify the contents  */
 /*          of this include file.                                         */
@@ -508,6 +509,7 @@
 #define  SOLUS_P_OPTODE_AREA_6            55      /* control type: numeric, callback function: Setting */
 #define  SOLUS_P_OPTODE_AREA_7            56      /* control type: numeric, callback function: Setting */
 #define  SOLUS_P_OPTODE_AREA_8            57      /* control type: numeric, callback function: Setting */
+#define  SOLUS_P_FLAG78                   58      /* control type: ring, callback function: Setting */
 
 #define  STEP                             13      /* callback function: ClosePanel */
 #define  STEP_TEXTMSG_1                   2       /* control type: textMsg, callback function: (none) */

@@ -651,7 +651,7 @@
 #define LABEL_TAC_LIMIT_HIGH    "tac_limit_high"
 
 
-#define INFINITY	 60000
+//#define INFINITY	 60000
 #define MBADR	     0x280  // i/o port address on which the card is mapped 
 #define MAX_CHANN_SILENA	     8192   //
 #define GROUP_SILENA    0	    //
@@ -1529,6 +1529,7 @@ struct FlagsS{
 	 UINT16 gsipm_gate_off_after_meas;
 	 UINT16 laser_off_after_meas;
 	 UINT16 turnoff_unused_LD;
+	 UINT16 trim_method;
 };
 struct BufferS{
 	 UINT16 SPAD_Voltage;

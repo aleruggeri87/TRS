@@ -9743,7 +9743,7 @@ void ReadMeasSequenceFromFile(void){
 	FILE *sfile;
 	MakePathname (DIR_SOLUS, P.Solus.SeqFile, P.Solus.SeqFilePath);
 	sfile = fopen (P.Solus.SeqFilePath, "r");
-	if (sfile<0||sfile==NULL){
+	if ((int)sfile<0||sfile==NULL){
 		ErrHandler(ERR_SOLUS,-3,"No SequenceFile Present");
 		return;
 	}
@@ -10065,7 +10065,8 @@ void GetInfoSolus(void){
 				SetCtrlVal(hDisplay,DISPLAY_MESSAGE,message);
 				continue;
 			}
-			ret = SOLUS_GetCalibrationMap(P.Solus.SolusObj,io,&P.Solus.CalibMap[io]);
+			ret = SOLUS_GetCalibrationMap(P.Solus.SolusObj,io,&P.Solus.CalibMap[io],&P.Solus.OptArea[io]);
+			SetCtrlVal (hSolus, SOLUS_P_OPTODE_AREA_1+io, P.Solus.OptArea[io]);
 		}
 	}
 	
@@ -10118,7 +10119,7 @@ void GetInfoSolus(void){
 	}
 	
 	//Get Optode Area
-	for(io=0;io<N_OPTODE;io++){  
+	/*for(io=0;io<N_OPTODE;io++){  
 		if (P.Solus.OptList[io]){ 
 			ret = SOLUS_GetArea(P.Solus.SolusObj,io,&P.Solus.OptArea[io]);
 			if(ret<0){
@@ -10130,7 +10131,7 @@ void GetInfoSolus(void){
 				//SetCtrlVal (hSolus, SOLUS_P_OPTODE_AREA_1+io, P.Solus.OptArea[io]);	
 			}
 		}	
-	}
+	}*/
 	
 	//Get Laser frequency
 	ret = SOLUS_ReadLaserFrequency(P.Solus.SolusObj);
@@ -10252,7 +10253,7 @@ void SetInfoSolus(void){
 	//Set Calibration Map
 	for(io=0;io<N_OPTODE;io++){
 		if (P.Solus.OptList[io]){ 
-			ret = SOLUS_SetCalibrationMap(P.Solus.SolusObj,io,&P.Solus.CalibMap[io]);
+			ret = SOLUS_SetCalibrationMap(P.Solus.SolusObj,io,&P.Solus.CalibMap[io],P.Solus.OptArea[io]);
 			if(ret<0){
 				ErrHandler(ERR_SOLUS,ret,"SOLUS_SetCalibrationMap");
 				sprintf (message, "Error setting Opt%d calibration map\n",io);
@@ -10317,7 +10318,7 @@ void ValidateMeasSequenceSolus(void){
 void ManageTrimSolus(void){
 	MakePathname (DIR_SOLUS, P.Solus.TrimPosFile, P.Solus.TrimPosFilePath);
 	P.Solus.TrimPosFileFile = fopen (P.Solus.TrimPosFilePath, "w+");	
-	if(P.Solus.TrimPosFileFile<0||P.Solus.TrimPosFileFile==NULL){
+	if((int)P.Solus.TrimPosFileFile<0||P.Solus.TrimPosFileFile==NULL){
 		ErrHandler(ERR_SOLUS,-3,"Error opening TrimPosFile");
 		return;
 	}
@@ -10852,7 +10853,7 @@ int ReadSolusLDsLUT(int GoalEntryID, char Step){
 	fgets(line,STRLEN,sfile);
 	int ret;
 	do{
-		ret = fscanf (sfile, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t\%d\t%d\%ds",&EntryID,&OptodeID,&LaserID,&DelayF,&DelayC,&WidthF,&WidthC,&CurrentF,&CurrentC,&Citr);
+		ret = fscanf (sfile,"%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d%ds",&EntryID,&OptodeID,&LaserID,&DelayF,&DelayC,&WidthF,&WidthC,&CurrentF,&CurrentC,&Citr);
 		if(ret==EOF) break;
 		if(EntryID==GoalEntryID&&OptodeID==P.Step[Step].Com-1){
 			int ild = LaserID;

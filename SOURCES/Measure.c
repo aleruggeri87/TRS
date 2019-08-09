@@ -10754,6 +10754,7 @@ int CVICALLBACK GetOptodeDiagnParams (int panel, int control, int event,void *ca
 		P.Solus.T_OptodeAnalog[io].gsipmCoreVoltage = P.Solus.OptodeAnalog[io].gsipmCoreVoltage;
 		P.Solus.T_OptodeAnalog[io].laserVoltage = P.Solus.OptodeAnalog[io].laserVoltage;
 		P.Solus.T_OptodeAnalog[io].picTemperature = P.Solus.OptodeAnalog[io].picTemperature;
+		P.Solus.T_OptodeAnalog[io].gsipmTemperature = P.Solus.OptodeAnalog[io].gsipmTemperature;
 	}
 	CompleteParmS();
 	UpdatePanel();

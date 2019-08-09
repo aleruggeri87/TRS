@@ -1564,6 +1564,7 @@ struct T_OptodeAnalogS{
 	 unsigned int gsipmCoreVoltage;
 	 unsigned int laserVoltage;
 	 unsigned int picTemperature;
+	 unsigned int gsipmTemperature;
 };
 struct SolusS{
 	 SOLUS_H SolusObj;

@@ -2045,7 +2045,9 @@ void SpcClose(void){
 		case SPC_SOLUS: 
 				if(!P.Solus.MeasStopped){
 					StopSolusMeas();
-					GetInfoSolus();
+					if(!P.Solus.Abort_error){
+						GetInfoSolus();
+					}
 				}
 				break;
 		case TEST: break;
@@ -9737,6 +9739,7 @@ void InitSolus(void){
 	P.Solus.ProduceTrimFile = FALSE;
 	P.Solus.Initialized = TRUE;
 	P.Solus.NLines = 1;
+	P.Solus.Abort_error=FALSE;
 	Passed();
 }
 void ReadMeasSequenceFromFile(void){
@@ -10354,14 +10357,32 @@ void WaitSolus(void){
 	UINT16 nlines=0;
 	do{
 		ret = SOLUS_QueryNLinesAvailable(P.Solus.SolusObj,&nlines);
-		if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_QueryNLinesAvailable");return;}
+		if(ret<0) {
+			ErrHandler(ERR_SOLUS,ret,"SOLUS_QueryNLinesAvailable");
+			if(ret==PROBE_ERROR){
+				P.Command.Abort=TRUE;
+				P.Solus.Abort_error=TRUE;
+				MessagePopup ("FATAL ERROR", "The SOLUS Probe has been switched OFF.\nPlease cycle its power supply and restart the TRS.\nSend MPD the dump_error XML file.");
+			}
+			return;
+		}
 	}while(nlines < P.Solus.NLines);
 }
 void GetDataSolus(void){
 	int io,ic,ib=0,ret,iro=0, Temperature;
 	Frame SingleFrame;
-	ret = SOLUS_GetMeasurement(P.Solus.SolusObj,&P.Solus.DataSolus,P.Solus.NLines);
-	if(ret<0){ErrHandler(ERR_SOLUS,ret,"SOLUS_GetMeasurement");return;}
+	if(!P.Solus.Abort_error){
+		ret = SOLUS_GetMeasurement(P.Solus.SolusObj,&P.Solus.DataSolus,P.Solus.NLines);
+		if(ret<0){
+			ErrHandler(ERR_SOLUS,ret,"SOLUS_GetMeasurement");
+			if(ret==PROBE_ERROR){                                                                                                                                                
+				P.Command.Abort=TRUE;                                                                                                                                            
+				P.Solus.Abort_error=TRUE;                                                                                                                                        
+				MessagePopup ("FATAL ERROR", "The SOLUS Probe has been switched OFF.\nPlease cycle its power supply and restart the TRS.\nSend MPD the dump_error XML file.");   
+			}                                        
+			return;
+		}
+	}
 	for(io=0;io<N_OPTODE;io++){
 		if(P.Solus.OptList[io]){
 			SingleFrame = (*P.Solus.DataSolus)[iro];

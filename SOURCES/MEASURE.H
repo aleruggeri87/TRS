@@ -1629,6 +1629,7 @@ struct SolusS{
 	 struct FlagsS Flags;
 	 struct BufferS Buffer;
 	 char ProduceTrimFile;
+	 BOOLEAN Abort_error;
 };
 
 struct SpcS {

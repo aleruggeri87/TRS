@@ -107,7 +107,7 @@ extern "C" {
 		COMM_TIMEOUT = -4,						/**<Timeout during communication.*/
 		OUT_OF_RANGE = -5,						/**<Parameters out of range.*/
 		INVALID_OP = -6,                        /**<The required function can not be executed. */
-		PROBE_ERROR = 7,						/**<Probe returned an error code.*/
+		PROBE_ERROR = -7,						/**<Probe returned an error code.*/
 		FIRMWARE_NOT_COMPATIBLE = -8,           /**<Firmware not compatible.*/
 		OPTODE_NOT_PRESENT = -9,				/**<Optode not present or not working.*/
 		FIRMWARE_UPDATE_ERROR = -10,			/**<Error during firmware update.*/

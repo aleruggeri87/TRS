@@ -10883,7 +10883,7 @@ int ReadSolusLDsLUT(int GoalEntryID, char Step){
 	fgets(line,STRLEN,sfile);
 	int ret;
 	do{
-		ret = fscanf (sfile, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t\%d\t%d\%ds",&EntryID,&OptodeID,&LaserID,&DelayF,&DelayC,&WidthF,&WidthC,&CurrentF,&CurrentC,&Citr);
+		ret = fscanf (sfile, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d%ds",&EntryID,&OptodeID,&LaserID,&DelayF,&DelayC,&WidthF,&WidthC,&CurrentF,&CurrentC,&Citr);
 		if(ret==EOF) break;
 		if(EntryID==GoalEntryID&&OptodeID==P.Step[Step].Com-1){
 			int ild = LaserID;

@@ -8425,7 +8425,7 @@ void DataSave(void){
 	}
 	
 	
-	fflush(P.File.File);
+	//fflush(P.File.File);
 //	fclose(P.File.File);
 	for(ifr=0;ifr<P.Frame.Num;ifr++)
 		for(ip=0;ip<P.Num.Page;ip++)

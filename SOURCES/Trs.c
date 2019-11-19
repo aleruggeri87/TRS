@@ -52,13 +52,13 @@ int main (int argc, char *argv[])
 	if ((hSolus = LoadPanel (hTrs, PATH_UIR, SOLUS_P)) < 0) return -1;
 	
 	CreateTable();
-	
+
 	DisplayPanel(hTrs);
 	DisplayPanel(hParm);
 	InitPanel();
 	InitPad();								//ALE
 	InitVariable();
-	SetSleepPolicy (VAL_SLEEP_MORE);
+	SetSleepPolicy(VAL_SLEEP_NONE);// (VAL_SLEEP_MORE);
 	RunUserInterface ();
 	return 0;
 	}

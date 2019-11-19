@@ -10374,6 +10374,7 @@ void WaitSolus(void){
 			}
 			return;
 		}
+		D.Buffer[0][0]=nlines;
 	}while(nlines < P.Solus.NLines);
 }
 void GetDataSolus(void){
@@ -10414,7 +10415,7 @@ void GetDataSolus(void){
 			iro++;
 		}
 		else{
-			for(ic=0;ic<P.Chann.Num;ic++)
+			for(ic=1;ic<P.Chann.Num;ic++)
 				D.Buffer[ib][io*P.Chann.Num+ic]	= (T_DATA) 0;
 		}
 	}

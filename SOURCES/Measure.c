@@ -715,7 +715,7 @@ void InitMem(void){
 	SetCtrlVal (hDisplay, DISPLAY_MESSAGE, "Initializing Memory ... ");
 	
 	D.Osc=DAlloc2D(P.Num.Board*P.Num.Det,P.Chann.Num); 
-	D.Buffer=DAlloc2D(P.Num.Board,P.Num.Det*P.Chann.Num); 
+	D.Buffer=DAlloc2D(P.Num.Board,P.Num.Det*P.Chann.Num);
 	if(P.Spc.Subtract) D.Last=DAlloc1D(P.Chann.Num); 
 	
 	if(P.Contest.Run!=CONTEST_MEAS){ Passed(); return;}
@@ -992,9 +992,17 @@ void CompleteParmS(void){
 	if(P.Spc.Type==SPC_NIRS)
 		if(P.Spc.Nirs[0].Lambda==NIRS_LAMBDA12) P.Spc.RoutingBits=1; else P.Spc.RoutingBits=0;
 	if(P.Spc.Type==SPC_LUCA) P.Spc.RoutingBits=1;
-	if(P.Spc.Type==SPC_SOLUS) P.Spc.RoutingBits=sqrt(N_OPTODE);
+	if(P.Spc.Type==SPC_SOLUS){
+		if(N_OPTODE>=8){
+			P.Spc.RoutingBits=3;
+		}else if(N_OPTODE>=4){
+			P.Spc.RoutingBits=2;
+		}else{
+			P.Spc.RoutingBits=1;
+		}
+	}
 	for(ir=0;ir<P.Spc.RoutingBits;ir++) P.Num.Det*=2;
-	
+
 	// Filter-Page-Acq
 	P.Acq.Frame=1; //TODO: sistemare per Oxym+Spectra..
 	if(P.Layout.Layout){

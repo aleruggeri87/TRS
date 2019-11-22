@@ -79,7 +79,7 @@
 #define RECOVERY_CONST				2
 
 /* TABLE CONSTANTS */  
-#define MAX_TABLE		1265
+#define MAX_TABLE		1600 //1265
 #define STRLEN_TABLE	20
 #define TCHAR			0
 #define TINT			1
@@ -651,7 +651,7 @@
 #define LABEL_TAC_LIMIT_HIGH    "tac_limit_high"
 
 
-#define INFINITY	 60000
+//#define INFINITY	 60000
 #define MBADR	     0x280  // i/o port address on which the card is mapped 
 #define MAX_CHANN_SILENA	     8192   //
 #define GROUP_SILENA    0	    //
@@ -1534,6 +1534,7 @@ struct FlagsS{
 	 UINT16 trim_method;
 	 UINT16 produce_trim_file;
 	 UINT16 use_trim_file;
+	 UINT16 use_legacy_seq;
 };
 struct BufferS{
 	 UINT16 SPAD_Voltage;

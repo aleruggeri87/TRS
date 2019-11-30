@@ -10326,11 +10326,11 @@ void SetInfoSolus(void){
 	P.Solus.Buffer.SPAD_Voltage=P.Solus.ControlParams.SPAD_Voltage;
 	}
 	
-	if(P.Solus.Flags.perform_autocal){
+	//if(P.Solus.Flags.perform_autocal){
 		//Set AutoCal params
 		ret = SOLUS_SetAutocalParams(P.Solus.SolusObj,P.Solus.AutocalParams);
 		if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_SetAutocalParams");}
-	}
+	//}
 }
 void ValidateMeasSequenceSolus(void){
 	int is;

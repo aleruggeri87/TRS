@@ -10369,8 +10369,8 @@ void StartSolusMeas(void){
 		P.Solus.MeasSequence[0].meas_time = P.Spc.TimeSolus;
 	}
 	if(P.Contest.Function == CONTEST_OSC){
-			ret = SOLUS_SetSequence(P.Solus.SolusObj,&P.Solus.MeasSequence);
-			if(ret<0){ErrHandler(ERR_SOLUS,ret,"SOLUS_SetSequence\n");P.Solus.StartError = TRUE;P.Solus.MeasStarted = FALSE;return;}
+		ret = SOLUS_SetSequence(P.Solus.SolusObj,&P.Solus.MeasSequence);
+		if(ret<0){ErrHandler(ERR_SOLUS,ret,"SOLUS_SetSequence\n");P.Solus.StartError = TRUE;P.Solus.MeasStarted = FALSE;return;}
 	}
 	char AcqType = fmod(P.Solus.AcqType,2);
 	ret =  SOLUS_StartSequence(P.Solus.SolusObj,AcqType);
@@ -10475,7 +10475,7 @@ void StopSolusDCRMeasure(void){
 void StopSolusMeas(void){
 	if(!P.Solus.MeasStarted) return;
 	int ret;
-	ret = SOLUS_StopSequence(P.Solus.SolusObj);
+	ret = SOLUS_StopSequence(P.Solus.SolusObj, P.Solus.Flags.save_dump);
 	if(ret<0){ErrHandler(ERR_SOLUS,ret,"SOLUS_StopSequence");P.Solus.StopError = TRUE;P.Solus.MeasStopped=FALSE;return;}
 	else {
 		//SetCtrlVal(hDisplay,DISPLAY_MESSAGE,"Solus Meas Stopped\n");
@@ -10934,7 +10934,7 @@ void InitSipmStepSolus(char Step){
 	if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_SetSequence");}
 	ret = SOLUS_StartSequence(P.Solus.SolusObj,P.Solus.AcqType);
 	if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_StartSequence");}
-	ret = SOLUS_StopSequence(P.Solus.SolusObj);
+	ret = SOLUS_StopSequence(P.Solus.SolusObj, P.Solus.Flags.save_dump);
 	if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_StopSequence");}
 	
 }
@@ -10945,7 +10945,7 @@ void CloseSipmStepSolus(char Step){
 	if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_SetSequence");}
 	ret = SOLUS_StartSequence(P.Solus.SolusObj,P.Solus.AcqType);
 	if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_StartSequence");}
-	ret = SOLUS_StopSequence(P.Solus.SolusObj);
+	ret = SOLUS_StopSequence(P.Solus.SolusObj, P.Solus.Flags.save_dump);
 	if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_StopSequence");}
 	/*ret = SOLUS_SetArea(P.Solus.SolusObj,P.Step[Step].Com-1,SOLUS_MIN_SPAD_NUM);
 	if (ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_SetArea");}*/
@@ -10959,7 +10959,7 @@ void MoveSipmStepSolus(char Step,long Goal,char Wait){
 	if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_SetSequence");}
 	ret = SOLUS_StartSequence(P.Solus.SolusObj,P.Solus.AcqType);
 	if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_StartSequence");}
-	ret = SOLUS_StopSequence(P.Solus.SolusObj);
+	ret = SOLUS_StopSequence(P.Solus.SolusObj, P.Solus.Flags.save_dump);
 	if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_StopSequence");}
 	ret = SOLUS_SetSequence(P.Solus.SolusObj,&P.Solus.MeasSequence);
 	/*ret = SOLUS_SetArea(P.Solus.SolusObj,P.Step[Step].Com-1,(UINT16) Goal);

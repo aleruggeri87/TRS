@@ -10315,8 +10315,9 @@ void SetInfoSolus(void){
 	//Set Flags
 	UINT16 Flags = (P.Solus.Flags.turnoff_unused_LD) << 5 | (P.Solus.Flags.laser_off_after_meas) << 4 | (P.Solus.Flags.gsipm_gate_off_after_meas) << 3 | (P.Solus.Flags.override_map) << 2 | (P.Solus.Flags.perform_autocal) << 1 | (P.Solus.Flags.force_laser_off);
 	Flags += P.Solus.Flags.trim_method << 6;
+	Flags += P.Solus.Flags.interlock_bypass << 8;
 
-	ret = SOLUS_SetFlags(P.Solus.SolusObj,Flags,0x00FF);	
+	ret = SOLUS_SetFlags(P.Solus.SolusObj,Flags,0x01FF);	
 	if(ret<0) {ErrHandler(ERR_SOLUS,ret,"SOLUS_SetFlags");} 
 	
 	//Set Params Control

@@ -749,6 +749,7 @@ void CreateTable(void){
 	AddTab(CE,TCHAR,SOLUS_P,SOLUS_P_PRODUCE_TRIM_FILE,"produce_trim_file",0,0,&P.Solus.Flags.produce_trim_file);
 	AddTab(CE,TSTRING,SOLUS_P,SOLUS_P_TRIM_POS_FILE_PATH,"TrimPosFile",0,0,P.Solus.TrimPosFile);
 	AddTab(CE,TCHAR,SOLUS_P,SOLUS_P_USE_LEGACY_SEQ,"use_legacy_seq",0,0,&P.Solus.Flags.use_legacy_seq);
+	AddTab(CE,TCHAR,SOLUS_P,SOLUS_P_INTERLOCK_BYP,"interlock_bypass",0,0,&P.Solus.Flags.interlock_bypass);
 	AddTab(CE,TCHAR,SOLUS_P,SOLUS_P_ADD_TEMP_IN_MEAS,"Add_GSIPM_Temp_in_hist",0,0,&P.Solus.T_AutocalParams.start_pos);
 	AddTab(CE,TCHAR,SOLUS_P,SOLUS_P_SAVE_DUMP,"Save_dump_file",0,0,&P.Solus.Flags.save_dump);
 	
